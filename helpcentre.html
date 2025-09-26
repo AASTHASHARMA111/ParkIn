@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parkin FAQs</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .subOptions {
+      display: none;
+      padding-left: 20px;
+    }
+
+    #helpContent {
+      margin-top: 20px;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
+    }
+
+    p {
+      line-height: 1.6;
+    }
+
+    strong {
+      color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Your Web Page</h1>
+
+  <button onclick="toggleHelp()">Help Center</button>
+
+  <div id="helpOptions" class="subOptions">
+    <p onclick="showContent('FAQs')">FAQs</p>
+    <p onclick="showContent('Time Related')">Time Related</p>
+    <p onclick="showContent('Payment')">Payment</p>
+    <p onclick="showContent('Refund')">Refund</p>
+    <p onclick="showContent('Contact Us')">Contact Us</p>
+  </div>
+
+  <div id="helpContent" class="subOptions">
+    <!-- Content for each option will be displayed here -->
+  </div>
+
+  <script>
+    function toggleHelp() {
+      var helpOptions = document.getElementById("helpOptions");
+      helpOptions.style.display = (helpOptions.style.display === "none") ? "block" : "none";
+      // Hide the content when toggling help options
+      document.getElementById("helpContent").style.display = "none";
+    }
+
+    function showContent(option) {
+      var helpContent = document.getElementById("helpContent");
+      helpContent.style.display = "block";
+      // You can customize the content for each option here
+      switch(option) {
+        case 'FAQs':
+          showFAQsContent();
+          break;
+        case 'Time Related':
+          showTimeRelatedContent();
+          break;
+        case 'Payment':
+          showPaymentContent();
+          break;
+        case 'Refund':
+          showRefundContent();
+          break;
+        case 'Contact Us':
+          showOtherOptions('Contact Us');
+          break;
+        default:
+          helpContent.innerHTML = "<p>Content not available.</p>";
+      }
+    }
+
+    function showFAQsContent() {
+      var helpContent = document.getElementById("helpContent");
+      // Add specific content for FAQs
+      helpContent.innerHTML = "<p>**FAQs Content:**</p><p>- <strong>Why choose Parkin for parking?</strong> Parkin offers efficient one-way stoppers, attentive attendants, and both online and offline payment options for a seamless experience.</p><p>- <strong>How does pricing work?</strong> Pricing is determined based on hourly or daily rates, with special event packages, online booking discounts, and flexible payment options.</p><p>- <strong>How does Parkin ensure vehicle safety?</strong> We ensure safety through surveillance cameras, well-lit areas, attentive staff, controlled access, and collaboration with law enforcement.</p><p>- <strong>What security measures are in place?</strong> Our facilities have controlled access, well-lit areas, surveillance cameras, and regular maintenance, ensuring a secure environment.</p><p>- <strong>Are there membership plans?</strong> No, we don't offer membership plans, focusing on transparent pricing and accessible parking for all users.</p>";
+    }
+
+    function showTimeRelatedContent() {
+      var helpContent = document.getElementById("helpContent");
+      // Add specific content for Time Related
+      helpContent.innerHTML = "<p>**Time Related Content:**</p><p>- <strong>Rescheduling Steps:</strong> 1. Log in to your Parkin account. 2. Go to 'My Reservations.' 3. Select the booking you want to reschedule. 4. Choose the new date and time. 5. Confirm the changes.</p><p>- <strong>Extending Time Steps:</strong> 1. Log in to your Parkin account. 2. Go to 'My Reservations.' 3. Select the booking you want to extend. 4. Choose the additional time. 5. Confirm the extension and make the payment if applicable.</p>";
+    }
+
+    function showPaymentContent() {
+      var helpContent = document.getElementById("helpContent");
+      // Add specific content for Payment
+      helpContent.innerHTML = "<p>**Payment Content:**</p><p>- <strong>Online Payment Steps:</strong> 1. Choose 'Online Payment' during the booking process. 2. Select your preferred online payment method (Credit Card, PayPal, etc.). 3. Complete the transaction securely through the provided portal.</p><p>- <strong>Offline Payment Steps:</strong> 1. Choose 'Offline Payment' during the booking process. 2. Visit the parking facility. 3. Provide the booking details to the attendant. 4. Receive an OTP on your registered mobile number. 5. Share the OTP with the attendant for confirmation. 6. Make the payment to the attendant to complete the booking.</p>";
+    }
+
+    function showRefundContent() {
+      var helpContent = document.getElementById("helpContent");
+      // Add specific content for Refund
+      helpContent.innerHTML = "<p>**Refund Content:**</p><p>- <strong>Cancellation Steps:</strong> 1. Log in to your Parkin account. 2. Go to 'My Reservations.' 3. Select the booking you want to cancel. 4. Initiate the cancellation process. 5. Confirm your decision.</p><p>- <strong>Refunding of 90% Steps:</strong> 1. Cancellations made at least 24 hours before the scheduled parking time are eligible for a 90% refund. 2. Refunds will be processed to the original payment method.</p>";
+    }
+
+    function showOtherOptions(mainOption) {
+      var helpContent = document.getElementById("helpContent");
+      // Add specific content for each main option
+      switch(mainOption) {
+        case 'Contact Us':
+          helpContent.innerHTML = "<p>**Contact Us Options:**</p><p>- <strong>Talk with Us:</strong> Call our customer support at [Your Phone Number] during business hours for immediate assistance.</p><p>- <strong>Chat with Us:</strong> Use the live chat feature on our website or mobile app to chat with our support team in real-time.</p>";
+          break;
+        default:
+          helpContent.innerHTML += "<p>Content not available.</p>";
+      }
+    }
+  </script>
+
+</body>
+</html>

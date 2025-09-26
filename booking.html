@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parking Page</title>
+  <style>
+    /* Styles for Parking Page */
+
+/* Basic styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 5px;
+  /* padding: 20px; */
+  background-color: #474444;
+}
+#bookBtn {
+  font-size: 40px;
+  margin-top: 10px;
+}
+.booking-button {
+    background-color: #ff5722; /* Orange background color */
+    color: #fff; /* Text color */
+    border: none;
+    border-radius: 5px;
+    padding: 8px 25px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    margin-left: 70px;
+    margin: 0px auto;
+}
+h1 {
+  font-size: 100px;
+  font-family: serif;
+  color: white;
+  font-weight: bold;
+  letter-spacing: 2px;
+  background-color: #000;
+  text-align: center;
+}
+
+.parking-spots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.spot {
+  width: 80px;
+  height: 80px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.selected-spot {
+  text-align: center;
+  margin-top: 20px;
+  color: #fff;
+  font-size: 40px;
+}
+
+/* Styles for popup */
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 300px;
+  padding: 20px;
+  border-radius: 5px;
+  z-index: 999;
+}
+
+.popup-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.close {
+  float: right;
+  cursor: pointer;
+}
+.spot {
+  width: 60px; /* Set the width of each parking spot image */
+  height: 100px; /* Set the height of each parking spot image */
+  background-size: cover; /* Ensure the image covers the entire div */
+  background-repeat: no-repeat; /* Prevent image repetition */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+/* Styles for selected parking spot */
+.spot.selected {
+  border: 2px solid blue; /* Example: highlight border for the selected spot */
+}
+.light {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: gray;
+  display: inline-block;
+  margin-top: 8px;
+  animation: blink 1s infinite;
+  /* position: relative;
+  top: 15px; */
+}
+
+.red {
+  background-color: red;
+}
+
+.yellow {
+  background-color: yellow;
+  animation-delay: 0.5s;
+}
+
+.green {
+  background-color: green;
+  animation-delay: 1s;
+}
+
+@keyframes blink {
+  0%, 100% {
+      opacity: 0.7;
+  }
+  50% {
+      opacity: 1;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Parking Street
+      <div>
+        <span class="light red"></span>
+        <span class="light yellow"></span>
+        <span class="light green"></span>
+    </div>
+    </h1>
+  </div>
+  
+
+  <div class="parking-spots" id="parkingSpots">
+    <!-- Parking spots will be generated here -->
+  </div>
+
+  <div class="selected-spot">
+    <p id="selectedSpotInfo">Select a parking spot to see details</p>
+    <div>54 Four Wheeler Parking Spots are Available and 24 Two Wheeler Parking Spots are Available</div>
+    <button id="bookBtn" class="booking-button" onclick="bookSpot()">Book</button>
+  </div>
+
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePopup()">&times;</span>
+      <p id="popupMessage"></p>
+    </div>
+  </div>
+
+  <script>
+    // Parking spot data (example)
+const parkingSpots = [
+  { id: 1, price: 30, imageUrl: 'car.jpeg' },
+  { id: 2, price: 30, imageUrl: 'car.jpeg' },
+  { id: 3, price: 30, imageUrl: 'car.jpeg' },
+  { id: 4, price: 30, imageUrl: 'car.jpeg' },
+  { id: 5, price: 30, imageUrl: 'car.jpeg' },
+  { id: 6, price: 30, imageUrl: 'car.jpeg' },
+  { id: 7, price: 30, imageUrl: 'car.jpeg' },
+  { id: 8, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 9, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 10, price: 15, imageUrl: 'bike.jpeg' },
+
+  { id: 1, price: 30, imageUrl: 'car.jpeg' },
+  { id: 2, price: 30, imageUrl: 'car.jpeg' },
+  { id: 3, price: 30, imageUrl: 'car.jpeg' },
+  { id: 4, price: 30, imageUrl: 'car.jpeg' },
+  { id: 5, price: 30, imageUrl: 'car.jpeg' },
+  { id: 6, price: 30, imageUrl: 'car.jpeg' },
+  { id: 7, price: 30, imageUrl: 'car.jpeg' },
+  { id: 8, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 9, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 10, price: 15, imageUrl: 'bike.jpeg' },
+
+  { id: 1, price: 30, imageUrl: 'car.jpeg' },
+  { id: 2, price: 30, imageUrl: 'car.jpeg' },
+  { id: 3, price: 30, imageUrl: 'car.jpeg' },
+  { id: 4, price: 30, imageUrl: 'car.jpeg' },
+  { id: 5, price: 30, imageUrl: 'car.jpeg' },
+  { id: 6, price: 30, imageUrl: 'car.jpeg' },
+  { id: 7, price: 30, imageUrl: 'car.jpeg' },
+  { id: 8, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 9, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 10, price: 15, imageUrl: 'bike.jpeg' },
+
+  { id: 1, price: 30, imageUrl: 'car.jpeg' },
+  { id: 2, price: 30, imageUrl: 'car.jpeg' },
+  { id: 3, price: 30, imageUrl: 'car.jpeg' },
+  { id: 4, price: 30, imageUrl: 'car.jpeg' },
+  { id: 5, price: 30, imageUrl: 'car.jpeg' },
+  { id: 6, price: 30, imageUrl: 'car.jpeg' },
+  { id: 7, price: 30, imageUrl: 'car.jpeg' },
+  { id: 8, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 9, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 10, price: 15, imageUrl: 'bike.jpeg' },
+
+  { id: 1, price: 30, imageUrl: 'car.jpeg' },
+  { id: 2, price: 30, imageUrl: 'car.jpeg' },
+  { id: 3, price: 30, imageUrl: 'car.jpeg' },
+  { id: 4, price: 30, imageUrl: 'car.jpeg' },
+  { id: 5, price: 30, imageUrl: 'car.jpeg' },
+  { id: 6, price: 30, imageUrl: 'car.jpeg' },
+  { id: 7, price: 30, imageUrl: 'car.jpeg' },
+  { id: 8, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 9, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 10, price: 15, imageUrl: 'bike.jpeg' },
+
+  { id: 1, price: 30, imageUrl: 'car.jpeg' },
+  { id: 2, price: 30, imageUrl: 'car.jpeg' },
+  { id: 3, price: 30, imageUrl: 'car.jpeg' },
+  { id: 4, price: 30, imageUrl: 'car.jpeg' },
+  { id: 5, price: 30, imageUrl: 'car.jpeg' },
+  { id: 6, price: 30, imageUrl: 'car.jpeg' },
+  { id: 7, price: 30, imageUrl: 'car.jpeg' },
+  { id: 8, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 9, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 10, price: 15, imageUrl: 'bike.jpeg' },
+
+  { id: 1, price: 30, imageUrl: 'car.jpeg' },
+  { id: 2, price: 30, imageUrl: 'car.jpeg' },
+  { id: 3, price: 30, imageUrl: 'car.jpeg' },
+  { id: 4, price: 30, imageUrl: 'car.jpeg' },
+  { id: 5, price: 30, imageUrl: 'car.jpeg' },
+  { id: 6, price: 30, imageUrl: 'car.jpeg' },
+  { id: 7, price: 30, imageUrl: 'car.jpeg' },
+  { id: 8, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 9, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 10, price: 15, imageUrl: 'bike.jpeg' },
+
+  { id: 1, price: 30, imageUrl: 'car.jpeg' },
+  { id: 2, price: 30, imageUrl: 'car.jpeg' },
+  { id: 3, price: 30, imageUrl: 'car.jpeg' },
+  { id: 4, price: 30, imageUrl: 'car.jpeg' },
+  { id: 5, price: 30, imageUrl: 'car.jpeg' },
+  { id: 6, price: 30, imageUrl: 'car.jpeg' },
+  { id: 7, price: 30, imageUrl: 'car.jpeg' },
+  { id: 8, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 9, price: 15, imageUrl: 'bike.jpeg' },
+  { id: 10, price: 15, imageUrl: 'bike.jpeg' },
+
+
+  
+  // Add more parking spots as needed
+];
+
+const parkingSpotDiv = document.getElementById('parkingSpots');
+const selectedSpotInfo = document.getElementById('selectedSpotInfo');
+const bookBtn = document.getElementById('bookBtn');
+const popup = document.getElementById('popup');
+const popupMessage = document.getElementById('popupMessage');
+
+// Function to display parking spots in three rows
+// ... (existing code)
+
+// Function to display parking spots
+function displayParkingSpots() {
+  const numRows = 8;
+  const spotsPerRow = parkingSpots.length / numRows;
+
+  for (let i = 0; i < numRows; i++) {
+    const rowDiv = document.createElement('div');
+    rowDiv.classList.add('row');
+    
+    for (let j = 0; j < spotsPerRow; j++) {
+      const spot = parkingSpots[i * spotsPerRow + j];
+
+      const spotDiv = document.createElement('div');
+      spotDiv.classList.add('spot');
+      spotDiv.style.backgroundImage = `url(${spot.imageUrl})`;
+      spotDiv.setAttribute('data-price', spot.price);
+      spotDiv.setAttribute('data-id', spot.id);
+      spotDiv.addEventListener('click', selectSpot);
+
+      rowDiv.appendChild(spotDiv);
+    }
+
+    parkingSpotDiv.appendChild(rowDiv);
+  }
+}
+
+// ... (existing code)
+
+
+
+
+
+// Function to select a parking spot
+function selectSpot(event) {
+  const selected = document.querySelector('.selected');
+  if (selected) {
+    selected.classList.remove('selected');
+  }
+  event.target.classList.add('selected');
+  const price = event.target.getAttribute('data-price');
+  const spotId = event.target.getAttribute('data-id');
+  selectedSpotInfo.textContent = ` Price: Rs${price}`;
+}
+
+// Function to book a parking spot
+// function bookSpot() {
+//   const selected = document.querySelector('.selected');
+//   if (selected) {
+//     const spotId = selected.getAttribute('data-id');
+//     const price = selected.getAttribute('data-price');
+    
+//     // Check if the selected spot is a car or a bike and change the image accordingly
+//     if (selected.style.backgroundImage.includes('car.jpeg')) {
+//       selected.style.backgroundImage = "url('bookedcar.jpeg')"; // Change image for booked car spot
+//     } else if (selected.style.backgroundImage.includes('bike.jpeg')) {
+//       selected.style.backgroundImage = "url('bookedbike.jpeg')"; // Change image for booked bike spot
+//     }
+    
+//     selectedSpotInfo.textContent = `Parking Spot ${spotId} is booked for `;
+//     displayPopup('Your parking spot has been booked!');
+//     selected.classList.remove('selected');
+//   } else {
+//     displayPopup('Please select a parking spot.');
+//   }
+// }
+// ... (existing code)
+
+// Function to book a parking spot
+function bookSpot() {
+  const selected = document.querySelector('.selected');
+  if (selected) {
+    const spotId = selected.getAttribute('data-id');
+    const price = selected.getAttribute('data-price');
+    
+    // Check if the selected spot is a car or a bike and change the image accordingly
+    if (selected.style.backgroundImage.includes('car.jpeg')) {
+      selected.style.backgroundImage = "url('bookedcar.jpeg')"; // Change image for booked car spot
+    } else if (selected.style.backgroundImage.includes('bike.jpeg')) {
+      selected.style.backgroundImage = "url('bookedbike.jpeg')"; // Change image for booked bike spot
+    }
+    
+    selectedSpotInfo.textContent = `Parking Spot ${spotId} is booked for `;
+    displayPopup('Your parking spot has been booked!');
+    selected.classList.remove('selected');
+
+    // Open the login page in a new tab or window
+    window.open('NEW_loginsignup.html', '_self');
+  } else {
+    displayPopup('Please select a parking spot.');
+  }
+}
+
+// ... (existing code)
+
+
+
+
+// Function to display popup
+function displayPopup(message) {
+  popupMessage.textContent = message;
+  popup.style.display = 'block';
+}
+
+// Function to close popup
+function closePopup() {
+  popup.style.display = 'none';
+}
+
+// Display parking spots on page load
+displayParkingSpots();
+
+  </script>
+</body>
+</html>

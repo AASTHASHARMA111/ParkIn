@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenStreetMap Prototype</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+  <style>
+    .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: gray;
+    display: inline-block;
+    margin-top: 8px;
+    animation: blink 1s infinite;
+    /* position: relative;
+    top: 15px; */
+}
+
+.red {
+    background-color: red;
+}
+
+.yellow {
+    background-color: yellow;
+    animation-delay: 0.5s;
+}
+
+.green {
+    background-color: green;
+    animation-delay: 1s;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+button {
+  font-size: 15px;
+}
+label {
+  color: white;
+}
+.a {
+  background-color: black;
+  color: white;
+  font-size: small;
+}
+#getroute {
+  background-color: black;
+  color: white;
+  font-size: small;
+}
+input {
+  width: 94%;
+  margin: 3px auto;
+  border-radius: 10px;
+  height: 25px;
+}
+
+  </style>
+</head>
+<body>
+
+<div>
+  <input type="text" id="source" placeholder="Enter source address">
+</div>
+
+<div>
+  <input type="text" id="destination" placeholder="Enter destination address">
+</div>
+
+<div style="align-items: center;"> <button id="getroute" onclick="getRoute()">
+  <div class="dot red"></div>
+  <div class="dot yellow"></div>
+  <div class="dot green"></div>
+  Get Route
+</button><br>
+<button class="a" onclick="toggleMarkers()">Toggle Markers</button>
+<button class="a" onclick="clearMarkers()">Clear Markers</button>
+
+<button class="a" onclick="getCurrentLocation()">Get Current Location</button>
+
+<div id="map" style="height: 400px;"></div>
+
+<script>
+var map = L.map('map').setView([19.095, 72.826], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+var markers = L.layerGroup().addTo(map);
+
+var control = L.Routing.control({
+  waypoints: [],
+  routeWhileDragging: true
+}).addTo(map);
+
+function getRoute() {
+  var source = document.getElementById('source').value;
+  var destination = document.getElementById('destination').value;
+
+  // Geocode source and destination
+  Promise.all([geocode(source), geocode(destination)])
+    .then(function (results) {
+      var waypoints = results.map(function (result) {
+        return L.latLng(result.lat, result.lon);
+      });
+
+      control.setWaypoints(waypoints);
+    })
+    .catch(function (error) {
+      console.error('Error:', error);
+    });
+}
+
+function toggleMarkers() {
+  if (map.hasLayer(markers)) {
+    map.removeLayer(markers);
+  } else {
+    map.addLayer(markers);
+  }
+}
+
+function clearMarkers() {
+  markers.clearLayers();
+}
+
+function getCurrentLocation() {
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      var lat = position.coords.latitude;
+      var lon = position.coords.longitude;
+
+      map.setView([lat, lon], 13);
+      L.marker([lat, lon]).addTo(markers).bindPopup('Your Location').openPopup();
+    }, function (error) {
+      console.error('Error getting current location:', error.message);
+    });
+  } else {
+    alert('Geolocation is not supported in your browser');
+  }
+}
+
+function geocode(address) {
+  var url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+
+  return fetch(url)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      if (data.length > 0) {
+        return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+      } else {
+        return Promise.reject('Location not found');
+      }
+    });
+}
+
+// Add a dummy parking spot near Juhu Beach
+var juhuParkingSpotCoords = [19.095, 72.826];
+L.marker(juhuParkingSpotCoords, { icon: createCustomIcon() }).addTo(markers).bindPopup('Parking Spot near Juhu Beach  54-4w-rs30 24-2w-rs15' );
+
+// Add a dummy parking spot in Vashi, Shivaji Chowk
+var vashiParkingSpotCoords = [19.075, 72.998];
+L.marker(vashiParkingSpotCoords, { icon: createCustomIcon() }).addTo(markers).bindPopup('Parking Spot in Vashi, Shivaji Chowk 54-4w-rs30 24-2w-rs15');
+
+function createCustomIcon() {
+  return L.icon({
+    iconUrl: 'pointer.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+    shadowSize: [41, 41],
+  });
+}
+</script>
+
+</body>
+</html>

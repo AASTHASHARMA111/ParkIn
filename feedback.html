@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Form - PARK IN</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: gray;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h2{
+          background-color: #0c0e0f;
+    color: #fffdfd;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    border: 3px solid #0f0b15;
+}
+    #feedback-container {
+      text-align: center;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .header img {
+      max-width: 60px;
+      height: auto;
+      margin-right: 10px;
+    }
+
+    .star-container {
+      font-size: 30px;
+      margin-bottom: 20px;
+    }
+
+    .star {
+      cursor: pointer;
+      color: #ccc;
+    }
+
+    .star:hover,
+    .star.active {
+      color: #ffcc00;
+    }
+
+    #review-input {
+      width: 100%;
+      margin-top: 10px;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    #submit-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #feedback-message {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #4CAF50;
+    }
+    @media (max-width: 600px) {
+      #feedback-container {
+        padding: 10px;
+      }
+      .star-container {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="feedback-container">
+  <div class="header">
+    <img src="2.png" alt="PARK IN LOGO">
+    <h2>PARK IN</h2>
+  </div>
+
+  <h3>Feedback</h3>
+
+  <div class="star-container">
+    <span class="star" onclick="rate(1)">★</span>
+    <span class="star" onclick="rate(2)">★</span>
+    <span class="star" onclick="rate(3)">★</span>
+    <span class="star" onclick="rate(4)">★</span>
+    <span class="star" onclick="rate(5)">★</span>
+  </div>
+
+  <textarea id="review-input" placeholder="Write your review..."></textarea>
+
+  <button id="submit-button" onclick="submitFeedback()">Submit</button>
+
+  <div id="feedback-message"></div>
+
+  <script>
+    let selectedStars = 0;
+
+    function rate(stars) {
+      selectedStars = stars;
+      updateStars();
+    }
+
+    function updateStars() {
+      const stars = document.querySelectorAll('.star');
+      stars.forEach((star, index) => {
+        star.classList.toggle('active', index < selectedStars);
+      });
+    }
+
+    function submitFeedback() {
+      const review = document.getElementById('review-input').value;
+      document.getElementById('feedback-message').innerHTML = `Thank you for giving your feedback! You rated ${selectedStars} stars. 😊`;
+      saveFeedback(selectedStars, review);
+    }
+
+    function saveFeedback(stars, review) {
+      // In a real-world scenario, you would send this data to a server
+      // For demonstration purposes, we'll just log the data to the console
+      console.log(`Feedback saved: ${stars} stars, Review: ${review}`);
+      // You can use AJAX, Fetch API, or other methods to send data to a server
+      // Example using Fetch API:
+      // fetch('/api/save-feedback', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ stars, review }),
+      // })
+      // .then(response => response.json())
+      // .then(data => console.log(data))
+      // .catch(error => console.error('Error:', error));
+    }
+  </script>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logout</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #fafafa; /* Background color */
+      color: #262626; /* Text color */
+    }
+
+    .container {
+      max-width: 300px;
+      margin: 100px auto;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .confirmation-message {
+      margin-bottom: 20px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+    }
+
+    #confirm-btn {
+      background-color: #d9534f; /* Red color for "Yes" */
+      color: #fff; /* Text color */
+    }
+
+    #cancel-btn {
+      background-color: #5bc0de; /* Blue color for "No" */
+      color: #fff; /* Text color */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Logout</h2>
+
+    <div class="confirmation-message">
+      <p>Are you sure you want to logout?</p>
+    </div>
+
+    <div class="button-container">
+      <button id="confirm-btn" onclick="confirmLogout()">Yes</button>
+      <button id="cancel-btn" onclick="cancelLogout()">No</button>
+    </div>
+
+    <script>
+      function confirmLogout() {
+        // Perform logout action or redirect to logout endpoint
+        alert("Logout confirmed!"); // Replace with actual logout logic
+      }
+
+      function cancelLogout() {
+        // User clicked "No"
+        alert("Logout canceled."); // Replace with any action or remove this line
+      }
+    </script>
+  </div>
+
+</body>
+</html>

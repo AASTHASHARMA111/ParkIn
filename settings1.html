@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease; /* Add smooth transition */
+        }
+
+        body.dark-mode {
+            background-color: #333; /* Dark mode background color */
+            color: #fff; /* Dark mode text color */
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        section {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 0; /* Reset default margin for anchor inside h2 */
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            text-align: left; /* Align text to the left */
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        .legal-links {
+            margin-top: 20px;
+            color: #555;
+        }
+
+        .legal-links a {
+            display: block;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: #555;
+        }
+
+        .legal-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Settings Page</h1>
+    </header>
+
+    <section>
+        <button id="change-password-btn" onclick="toggleForm('change-password-form')">
+            Change Password
+        </button>
+        <form id="change-password-form" style="display: none;">
+            <label for="currentPassword">Current Password:</label>
+            <input type="password" id="currentPassword" required>
+
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" required>
+
+            <label for="confirmPassword">Confirm New Password:</label>
+            <input type="password" id="confirmPassword" required>
+
+            <button type="submit">Change Password</button>
+        </form>
+    </section>
+
+    <section>
+        <button id="display-settings-btn" onclick="toggleForm('display-settings-form')">
+            Display Settings
+        </button>
+        <form id="display-settings-form" style="display: none;">
+            <label for="theme">Theme:</label>
+            <select id="theme" onchange="toggleDarkMode()">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </select>
+
+            <label for="fontSize">Font Size:</label>
+            <input type="range" id="fontSize" min="12" max="24" onchange="changeFontSize()">
+
+            <label for="language">Language:</label>
+            <select id="language">
+                <option value="english">English</option>
+                <option value="hindi">Hindi</option>
+            </select>
+
+            <label for="notifications">Notification Preferences:</label>
+            <input type="checkbox" id="notifications" checked>
+            <label for="notifications">Receive notifications</label>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </section>
+
+    <section>
+        <button id="legal-compliance-btn" onclick="toggleContent('legal-compliance-content')">
+            Legal & Compliance
+        </button>
+        <div id="legal-compliance-content" style="display: none;" class="legal-links">
+            <a href="#terms">Terms and Conditions</a>
+            <a href="#privacy">Privacy Policy</a>
+            <a href="#cookies">Cookies Policy</a>
+        </div>
+        <p>Additional compliance information goes here.</p>
+    </section>
+
+    <script>
+        function toggleForm(formId) {
+            var form = document.getElementById(formId);
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleContent(contentId) {
+            var content = document.getElementById(contentId);
+            content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle('dark-mode');
+        }
+
+        function changeFontSize() {
+            var fontSizeValue = document.getElementById('fontSize').value;
+            document.body.style.fontSize = fontSizeValue + 'px';
+        }
+    </script>
+</body>
+</html>
+

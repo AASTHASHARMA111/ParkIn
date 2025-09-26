@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nearest Fuel Station Finder</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #474444; /* Dark grey background */
+    }
+    h1 {
+      text-align: center;
+      color: #FFFFFF;
+      padding: 12px;
+      background: #323232;
+      margin: 0;
+      font-size: 1.6em; /* Slightly smaller for better fit on mobile */
+    }
+    #map {
+      height: 65vh; /* Adjusted for better space management */
+    }
+    #distanceDisplay {
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      background: #323232;
+      font-size: 1.2em;
+      border-top: 1px solid #585858; /* Adds a subtle separator */
+    }
+    button {
+      display: block;
+      width: 80%; /* Narrower buttons for a more elegant look */
+      padding: 12px;
+      margin: 20px auto;
+      font-size: 1.1em;
+      color: #FFFFFF;
+      background: linear-gradient(145deg, #007BFF, #004A8F);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+    button:hover, button:focus {
+      background: linear-gradient(145deg, #0056b3, #003580);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Nearest Fuel Station</h1>
+  <div id="map"></div>
+  <div id="distanceDisplay">Distance: -- km</div>
+  <button onclick="findNearestStation()">Locate Nearest Station</button>
+
+  <script>
+    var map = L.map('map').setView([51.505, -0.09], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    var routingControl = L.Routing.control({
+      routeWhileDragging: true,
+      show: true,
+      addWaypoints: false,
+      fitSelectedRoutes: true,
+      lineOptions: {
+        styles: [{color: '#6FA1EC', weight: 4}]
+      },
+      createMarker: function() { return null; } // Disable default markers
+    }).addTo(map);
+
+    function findNearestStation() {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var currentPosition = [position.coords.latitude, position.coords.longitude];
+          var nearestStation = getMockNearestStation(currentPosition);
+
+          routingControl.setWaypoints([
+            L.latLng(currentPosition[0], currentPosition[1]),
+            L.latLng(nearestStation.lat, nearestStation.lon)
+          ]);
+
+          // Bind custom popup and update distance dynamically
+          routingControl.on('routesfound', function(e) {
+            var routes = e.routes;
+            var summary = routes[0].summary;
+            // Update the distance in the display
+            document.getElementById('distanceDisplay').textContent = 'Distance: ' + (summary.totalDistance / 1000).toFixed(2) + ' km';
+          });
+
+          // Create a small custom marker
+          L.marker([nearestStation.lat, nearestStation.lon], {
+            icon: L.divIcon({
+              className: 'custom-marker',
+              html: '<div style="background-color: #ff7800; width: 8px; height: 8px; border-radius: 50%;"></div>',
+              iconSize: L.point(8, 8),
+              popupAnchor: [0, -4],
+            })
+          }).addTo(map).bindPopup('Nearest Station').openPopup();
+
+        }, function(error) {
+          console.error('Error getting current location:', error);
+          alert('Geolocation error: ' + error.message);
+        });
+      } else {
+        alert('Geolocation is not supported by your browser.');
+      }
+    }
+
+    // Mock data function simulating an API response
+    function getMockNearestStation(currentPosition) {
+      return {
+        lat: currentPosition[0] + 0.01,
+        lon: currentPosition[1] + 0.01,
+        distance: '1.2' // Simulated distance for display
+      };
+    }
+  </script>
+
+</body>
+</html>

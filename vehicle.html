@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #474444;
+            font-family: Arial, sans-serif;
+        }
+        h2 {
+            background-color: #000;
+            font-size: 3rem;
+            font-family: serif;
+            color: white;
+            margin-top: 2%; 
+            text-align: center;
+            border-radius: 10px;
+        }
+        .vehicle {
+            background-color: #fff;
+            border-radius: 20px;
+            margin-top: 10px;
+            padding: 10px;
+            border: 3px solid grey;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        input[type="button"] {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Vehicles</h2>
+    <input type="button" id="btn" value="Add New +">
+    <div id="op"></div>
+    
+    <script>
+        let op = document.getElementById('op');
+        let btn = document.getElementById('btn');
+        
+        function addVehicle() {
+            let div = document.createElement("div");
+            div.classList.add("vehicle");
+            
+            let input = document.createElement("input");
+            input.setAttribute("type", "text");
+            input.setAttribute("placeholder", "Enter Vehicle Number");
+            
+            div.appendChild(input);
+            op.appendChild(div);
+        }
+        
+        btn.addEventListener("click", addVehicle);
+    </script>
+</body>
+</html>

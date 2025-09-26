@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #474444; /* Updated background color */
+            color: #fff;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column; /* Ensure vertical layout */
+            min-height: 100vh;
+            padding: 20px;
+        }
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .section {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            margin: 10px;
+            width: 100%; /* Full width for mobile compatibility */
+            max-width: 600px; /* Max width for larger screens */
+            text-align: left;
+            transition: transform 0.3s ease-in-out;
+        }
+        .section:hover {
+            transform: scale(1.03); /* Subtle hover effect */
+        }
+        .info, .edit-form {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        input[type="text"] {
+            width: 100%; /* Adjust for mobile */
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .edit-link, .add-link {
+            color: #4CAF50;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h2>My Account</h2>
+
+    <div class="section" id="personalDetails">
+        <h3>Personal Information</h3>
+        <div class="info"></div>
+        <div class="edit-form">
+            <p><strong>Name:</strong> <input type="text" id="nameInput" value=""></p>
+            <p><strong>Email:</strong> <input type="text" id="emailInput" value=""></p>
+            <button onclick="saveDetails('personal')">Save Details</button>
+        </div>
+        <p class="edit-link">Edit Personal Information</p>
+    </div>
+
+    <div class="section" id="vehicleDetails">
+        <h3>Vehicle Information</h3>
+        <div class="info"></div>
+        <div class="edit-form">
+            <p><strong>Make:</strong> <input type="text" id="makeInput" value=""></p>
+            <p><strong>Model:</strong> <input type="text" id="modelInput" value=""></p>
+            <p><strong>Year:</strong> <input type="text" id="yearInput" value=""></p>
+            <button onclick="saveDetails('vehicle')">Save Details</button>
+        </div>
+        <p class="edit-link">Edit Vehicle Information</p>
+    </div>
+
+    <div class="section" id="bookingHistory">
+        <h3>Booking History</h3>
+        <div class="info"></div>
+        <p>No Booking History</p>
+    </div>
+
+    <div class="section" id="paymentMethods">
+        <h3>Payment Methods</h3>
+        <div class="info"></div>
+        <div class="edit-form">
+            <p><strong>Primary Method:</strong> <input type="text" id="primaryMethodInput" value=""></p>
+            <p><strong>Secondary Method:</strong> <input type="text" id="secondaryMethodInput" value=""></p>
+            <button onclick="saveDetails('payment')">Save Details</button>
+        </div>
+        <p class="edit-link">Edit Payment Methods</p>
+    </div>
+
+    <script>
+        function displayDetails() {
+            ['personal', 'vehicle', 'payment'].forEach(section => {
+                const details = JSON.parse(localStorage.getItem(section + 'Details')) || {};
+                const container = document.getElementById(section + 'Details').querySelector('.info');
+                if (Object.keys(details).length > 0) {
+                    container.innerHTML = Object.keys(details).map(key => `<p><strong>${key}:</strong> ${details[key]}</p>`).join('');
+                    container.style.display = 'block';
+                    container.nextElementSibling.nextElementSibling.style.display = 'block';
+                } else {
+                    container.nextElementSibling.style.display = 'block'; // Show edit form if no details
+                    container.nextElementSibling.nextElementSibling.style.display = 'none';
+                }
+            });
+        }
+
+        function saveDetails(type) {
+            const details = {};
+            document.querySelectorAll('#' + type + 'Details .edit-form input').forEach(input => {
+                details[input.id.replace(type + 'Input', '')] = input.value;
+            });
+            localStorage.setItem(type + 'Details', JSON.stringify(details));
+            displayDetails();
+        }
+
+        document.querySelectorAll('.edit-link').forEach(link => {
+            link.onclick = function() {
+                const section = this.previousElementSibling;
+                section.style.display = 'block';
+                this.style.display = 'none';
+            };
+        });
+
+        window.onload = displayDetails;
+    </script>
+</body>
+</html>

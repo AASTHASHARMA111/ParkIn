@@ -1,0 +1,218 @@
+<DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkIN</title>
+    <link rel="stylesheet" href="styles.css">
+    
+</head>
+<body>
+    <!-- Start Page -->
+    <!-- <div class="start-page">
+       
+         <h1 class="app-name">ParkIN</h1><br><br><br><br><br><br>
+        <img src="parking.png" id="logo">
+        <button class="start-button" onclick="openLogin()">
+            <div>Start</div>
+        </button>
+        <div>
+            <span class="light red"></span>
+        <span class="light yellow"></span>
+        <span class="light green"></span>
+        </div>
+         <button class="start-button" onclick="openLogin()">Start</button> 
+    </div> -->
+    
+        <body>
+            <!-- Start Page -->
+            <div class="start-page">
+                <div class="background"></div>
+                <div class="content">
+        
+        <!-- Rest of your content here -->
+                <h1>Welcome to Parking App</h1>
+                <img src="ParkIN-logos__white (1).png" id="logo">
+                <!-- <h1 class="app-name">ParkIN</h1><br><br><br><br><br><br> -->
+                <!-- <img src="parking.png" id="logo"> -->
+                <button class="start-button" onclick="openLogin()">
+                    <div>Start</div>
+                </button>
+                <div>
+                    <span class="light red"></span>
+                <span class="light yellow"></span>
+                <span class="light green"></span>
+                </div>
+                <!-- <button class="start-button" onclick="openLogin()">Start</button> -->
+            </div>
+    </div>
+    <!-- <div class="login-container hidden">
+        
+    
+        <h2>Login/Sign Up</h2>
+        <form action="#" method="post">
+            <div class="input-group">
+                <label for="emailPhone">Email or Phone</label>
+                <input type="text" id="emailPhone" name="emailPhone" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="forgot-password">
+                <a href="#">Forgot Password?</a>
+            </div>
+            <button type="submit" class="login-button" onclick="openLogSign()">Login</button>
+        </form>
+        <div class="no-account">
+            Don't have an account? <button onclick="openSignUp()">Sign Up</button>
+        </div>
+    </div>
+    Login Page -->
+    <!-- <div class="login-page hidden">
+        <div>
+            <h1 id="Login" align="center">Sign Up</h1>
+            <form id="loginForm" action="#">
+                <input type="text" id="name" placeholder="Name" required><br>
+                <input type="email" id="email" placeholder="Email" required><br>
+                <input type="tel" id="phone" placeholder="Phone Number" required><br>
+                <input type="password" id="password" placeholder="Password" required><br>
+                <button type="submit" class="login-button green-button" onclick="return false;" style="background-color: #00cc66;">Send OTP</button><br>
+                <input type="text" id="otp" placeholder="Enter OTP"><br>
+                <button type="submit" class="login-button green-button" onclick="openMainPage()" style="background-color: #00cc66;">Sign Up</button>
+            </form>
+        </div>
+    </div> -->
+
+    <!-- Main Page -->
+    
+    <div class="main-page hidden">
+        <div class="header">
+            <button class="back-button" onclick="goBack()">
+                <div>&#8249; Back</div>
+            </button>
+            <div class="menu-icon" onclick="toggleMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <div class="app-name" id="app-name">PARKIN</div>
+            
+            <!-- <button class="menu-button" onclick="toggleMenu()">&#9776;</button>
+            <h1 class="app-name" id="app-name">ParkIN</h1> -->
+        </div>
+        <iframe src="mapnew.html" frameborder="0"></iframe>
+        
+          
+          <script>
+          var map = L.map('map').setView([0, 0], 2);
+          
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+          }).addTo(map);
+          
+          var markers = L.layerGroup().addTo(map);
+          
+          var control = L.Routing.control({
+            waypoints: [],
+            routeWhileDragging: true
+          }).addTo(map);
+          
+          function getRoute() {
+            var source = document.getElementById('source').value;
+            var destination = document.getElementById('destination').value;
+          
+            // Geocode source and destination
+            Promise.all([geocode(source), geocode(destination)])
+              .then(function (results) {
+                var waypoints = results.map(function (result) {
+                  return L.latLng(result.lat, result.lon);
+                });
+          
+                control.setWaypoints(waypoints);
+              })
+              .catch(function (error) {
+                console.error('Error:', error);
+              });
+          }
+          
+          function toggleMarkers() {
+            if (map.hasLayer(markers)) {
+              map.removeLayer(markers);
+            } else {
+              map.addLayer(markers);
+            }
+          }
+          
+          function clearMarkers() {
+            markers.clearLayers();
+          }
+          
+          function getCurrentLocation() {
+            if ('geolocation' in navigator) {
+              navigator.geolocation.getCurrentPosition(function (position) {
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+          
+                map.setView([lat, lon], 13);
+                L.marker([lat, lon]).addTo(markers).bindPopup('Your Location').openPopup();
+              }, function (error) {
+                console.error('Error getting current location:', error.message);
+              });
+            } else {
+              alert('Geolocation is not supported in your browser');
+            }
+          }
+          
+          function geocode(address) {
+            var url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+          
+            return fetch(url)
+              .then(function (response) {
+                return response.json();
+              })
+              .then(function (data) {
+                if (data.length > 0) {
+                  return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+                } else {
+                  return Promise.reject('Location not found');
+                }
+              });
+          }
+          </script>
+                      <button id="example-btn" class="search-button">
+                <i class="icon-parking"></i>
+                Book My Parking Spot
+            </button>
+            
+        </div>
+        <div class="main-buttons">
+            <button class="main-button find"><img src="Find.jpg" class="icon"><br>
+                Find
+            </button>
+            <a href="vehicle.html"><button class="main-button vehicles"><img src="Vehicle.jpg" class="icon"><br>
+                Vehicles</button></a>
+            <a href="MY_Acc2.html"><button class="main-button account"><img src="Account.jpg" class="icon"><br>
+                Account</button></a>
+                <a href="Fuel.html"><button class="main-button gas-stations"><img src="Fuel.jpg" class="icon"><br>
+                Fuel</button>
+        </div>
+    </div>
+
+    <!-- Menu -->
+    <div class="menu hidden">
+        <ul>
+            <li><a href="settings1.html">Settings</a></li>
+            <li><a href="feedback.html">Feedback</a></li>
+            <li><a href="helpcentre.html">Help Center</a></li>
+            <li><a href="aboutus.html">About Us</a></li>
+            <li><a href="logout.html">Logout</a></li>
+        </ul>
+    </div>
+    <!-- Rest of your HTML content -->
+
+    <script src="script.js"></script>
+    
+    
+</body>
+</html>

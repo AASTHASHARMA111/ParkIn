@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: gray;
+            text-align: center;
+        }
+
+        h2 {
+            color: white;
+        }
+
+        .details {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .license {
+            text-align: left;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .license p {
+            margin: 10px 0;
+        }
+
+        .license strong {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>My Account</h2>
+
+    <div class="details">
+        <h3>Driving License Details</h3>
+        <div class="license" id="licenseDetails">
+            <!-- License details will be dynamically populated here -->
+        </div>
+    </div>
+
+    <script>
+        function renderLicenseDetails(license) {
+            const licenseDetailsContainer = document.getElementById('licenseDetails');
+            licenseDetailsContainer.innerHTML = `
+                <p><strong>Name:</strong> ${license.name}</p>
+                <p><strong>License Number:</strong> ${license.licenseNumber}</p>
+                <!-- Add more fields as needed -->
+            `;
+        }
+
+        function getUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const params = {};
+
+            for (const [key, value] of urlParams.entries()) {
+                params[key] = decodeURIComponent(value);
+            }
+
+            return params;
+        }
+
+        const userDetails = getUrlParams();
+        renderLicenseDetails(userDetails);
+    </script>
+</body>
+</html>
