@@ -8,3 +8,5 @@ The system integrates IoT sensors, machine learning, and mapping tools to predic
 Key advantages include reduced vehicle search time, lower carbon emissions, increased city revenue, and enhanced safety by minimizing illegal parking. Antineutrino leverages modern technologies like React.js, Python (Flask/FastAPI), MongoDB, Mapbox, Firebase, and Google Cloud, ensuring scalability, security, and efficient data management.
 
 By combining AI-driven predictive analytics with real-time monitoring, the project offers a technologically advanced, economically viable, and socially impactful solution to urban parking problems. Antineutrino exemplifies how smart technologies can make cities more efficient, sustainable, and driver-friendly.
+
+(PS- To run the frontend provided in this repository, save all these files in the same folder location and run, the website will work.)
